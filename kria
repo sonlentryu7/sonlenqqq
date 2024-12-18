@@ -1,0 +1,75 @@
+Код для Default.aspx
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="TestAspNet45.Default" %>
+<html>
+<head>
+    <title>Calculator of Area</title>
+</head>
+<body>
+    <h1>Calculator of Area</h1>
+    <form method="post" action="default.asp">
+        <label for="shape">Choose a shape:</label>
+        <select name="shape" id="shape">
+            <option value="rectangle">Rectangle</option>
+            <option value="circle">Circle</option>
+            <option value="triangle">Triangle</option>
+        </select><br><br>
+
+        <div id="parameters">
+            <div id="rectangle" style="display: none;">
+                Width: <input type="text" name="width"><br>
+                Height: <input type="text" name="height"><br>
+            </div>
+            <div id="circle" style="display: none;">
+                Radius: <input type="text" name="radius"><br>
+            </div>
+            <div id="triangle" style="display: none;">
+                Base: <input type="text" name="base"><br>
+                Height: <input type="text" name="height_triangle"><br>
+            </div>
+        </div>
+
+        <input type="submit" value="Calculate Area">
+    </form>
+
+    <script>
+        document.getElementById('shape').onchange = function() {
+            var shape = this.value;
+            document.getElementById('rectangle').style.display = (shape === 'rectangle') ? 'block' : 'none';
+            document.getElementById('circle').style.display = (shape === 'circle') ? 'block' : 'none';
+            document.getElementById('triangle').style.display = (shape === 'triangle') ? 'block' : 'none';
+        };
+    </script>
+
+    <%
+    If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
+        Dim shape, area
+        shape = Request.Form("shape")
+
+        Select Case shape
+            Case "rectangle"
+                Dim width, height
+                width = CDbl(Request.Form("width"))
+                height = CDbl(Request.Form("height"))
+                area = width * height
+                Response.Write("<h2>The area of the rectangle is: " & area & "</h2>")
+
+            Case "circle"
+                Dim radius
+                radius = CDbl(Request.Form("radius"))
+                area = 3.14159 * (radius ^ 2)
+                Response.Write("<h2>The area of the circle is: " & area & "</h2>")
+
+            Case "triangle"
+                Dim base, height_triangle
+                base = CDbl(Request.Form("base"))
+                height_triangle = CDbl(Request.Form("height_triangle"))
+                area = 0.5 * base * height_triangle
+                Response.Write("<h2>The area of the triangle is: " & area & "</h2>")
+
+            Case Else
+                Response.Write("<h2>Unknown shape!</h2>")
+        End Select
+    End If
+    %>
+</body>
+</html>
